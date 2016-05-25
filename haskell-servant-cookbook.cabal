@@ -50,6 +50,21 @@ executable hello-server
                      , haskell-servant-cookbook
   default-language:    Haskell2010
 
+executable logger
+  hs-source-dirs:      logger
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , text
+                     , aeson
+                     , wai
+                     , wai-logger
+                     , warp
+                     , servant
+                     , servant-server
+                     , haskell-servant-cookbook
+  default-language:    Haskell2010
+
 test-suite test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
