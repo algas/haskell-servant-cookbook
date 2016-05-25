@@ -8,10 +8,10 @@ import           Servant
 import           Servant.API
 
 server :: Server HelloAPI
-server = hello :<|> users
+server = hello :<|> user
     where
         hello = return "Hello world"
-        users = return [User "John Smith" 26]
+        user n a = return $ User n a
 
 app :: Application
 app = serve helloApi server

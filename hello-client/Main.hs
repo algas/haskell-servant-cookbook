@@ -10,12 +10,12 @@ import           Network.HTTP.Client        (Manager, defaultManagerSettings,
 import           Servant.API
 import           Servant.Client
 
-hello :<|> users = client helloApi
+hello :<|> user = client helloApi
 
-queries :: Manager -> BaseUrl -> ExceptT ServantError IO (Text, [User])
+queries :: Manager -> BaseUrl -> ExceptT ServantError IO (Text, User)
 queries manager baseurl = do
     h <- hello manager baseurl
-    us <- users manager baseurl
+    us <- user "John Smith" 26 manager baseurl
     return (h, us)
 
 main :: IO ()
@@ -27,5 +27,3 @@ main = do
         Left err -> putStrLn $ "Error: " ++ show err
         Right p -> do
             print p
-    print ""
-

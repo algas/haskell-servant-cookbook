@@ -19,7 +19,7 @@ instance FromJSON User
 instance ToJSON User
 
 type HelloAPI  = Get '[PlainText] Text
-            :<|> "users" :> Get '[JSON] [User]
+            :<|> "user" :> Capture "name" Text :> Capture "age" Int :> Get '[JSON] User
 
 helloApi :: Proxy HelloAPI
 helloApi = Proxy
