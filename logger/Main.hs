@@ -1,21 +1,25 @@
+{-# LANGUAGE DataKinds         #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeOperators     #-}
 module Main where
 
-import           HelloApi
+import           Data.Text                (Text)
 import           Network.Wai
 import           Network.Wai.Handler.Warp
 import           Network.Wai.Logger       (withStdoutLogger)
 import           Servant
 import           Servant.API
 
-server :: Server HelloAPI
-server = hello :<|> user
-    where
-        hello = return "Hello world"
-        user n a = return $ User n a
+type SimpleAPI  = "log" :> Get '[PlainText] Text
+
+simpleApi :: Proxy SimpleAPI
+simpleApi = Proxy
+
+server :: Server SimpleAPI
+server = return "Simple"
 
 app :: Application
-app = serve helloApi server
+app = serve simpleApi server
 
 main :: IO ()
 main = do
