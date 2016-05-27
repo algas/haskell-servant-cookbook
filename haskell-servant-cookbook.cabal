@@ -65,6 +65,36 @@ executable logger
                      , haskell-servant-cookbook
   default-language:    Haskell2010
 
+executable https-client
+  hs-source-dirs:      https-client
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , text
+                     , aeson
+                     , http-client
+                     , http-client-tls
+                     , transformers
+                     , servant
+                     , servant-client
+                     , haskell-servant-cookbook
+  default-language:    Haskell2010
+
+executable https-server
+  hs-source-dirs:      https-server
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , text
+                     , aeson
+                     , wai
+                     , warp
+                     , warp-tls
+                     , servant
+                     , servant-server
+                     , haskell-servant-cookbook
+  default-language:    Haskell2010
+
 test-suite test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
