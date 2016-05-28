@@ -11,18 +11,8 @@ import           Network.HTTP.Client        (Manager, newManager)
 import           Network.HTTP.Client.TLS    (tlsManagerSettings)
 import           Servant.API
 import           Servant.Client
+import           SimpleApi
 
-type SimpleAPI  = Get '[PlainText] Text
-
-simpleApi :: Proxy SimpleAPI
-simpleApi = Proxy
-
-simple = client simpleApi
-
-queries :: Manager -> BaseUrl -> ExceptT ServantError IO (Text)
-queries manager baseurl = do
-    h <- simple manager baseurl
-    return h
 
 main :: IO ()
 main = do

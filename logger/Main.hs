@@ -9,17 +9,8 @@ import           Network.Wai.Handler.Warp
 import           Network.Wai.Logger       (withStdoutLogger)
 import           Servant
 import           Servant.API
+import           SimpleApi
 
-type SimpleAPI  = "log" :> Get '[PlainText] Text
-
-simpleApi :: Proxy SimpleAPI
-simpleApi = Proxy
-
-server :: Server SimpleAPI
-server = return "Simple"
-
-app :: Application
-app = serve simpleApi server
 
 main :: IO ()
 main = do
