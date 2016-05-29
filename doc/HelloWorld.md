@@ -103,7 +103,7 @@ main = do
             print p
 ```
 
-## 動作確認
+## Check
 
 0. Build  
 `$ stack build`
