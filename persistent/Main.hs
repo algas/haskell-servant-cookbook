@@ -1,0 +1,81 @@
+{-# LANGUAGE DataKinds                  #-}
+{-# LANGUAGE DeriveGeneric              #-}
+{-# LANGUAGE FlexibleInstances          #-}
+{-# LANGUAGE GADTs                      #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE MultiParamTypeClasses      #-}
+{-# LANGUAGE OverloadedStrings          #-}
+{-# LANGUAGE QuasiQuotes                #-}
+{-# LANGUAGE TemplateHaskell            #-}
+{-# LANGUAGE TypeFamilies               #-}
+{-# LANGUAGE TypeOperators              #-}
+module Main where
+
+import           Control.Monad.Logger         (NoLoggingT (..))
+import           Control.Monad.Trans.Class    (lift)
+import           Control.Monad.Trans.Reader   (runReaderT)
+import           Control.Monad.Trans.Resource (ResourceT, runResourceT)
+import           Data.Aeson
+import           Data.Text                    (Text)
+import qualified Data.Text                    as T
+import qualified Data.Text.IO                 as T
+import           Database.Persist
+import           Database.Persist.MySQL       (ConnectInfo (..),
+                                               SqlBackend (..),
+                                               defaultConnectInfo, runMigration,
+                                               runSqlPool, withMySQLConn)
+import           Database.Persist.Sql         (SqlPersistT, runSqlConn)
+import           Database.Persist.TH          (mkMigrate, mkPersist,
+                                               persistLowerCase, share,
+                                               sqlSettings)
+import           GHC.Generics
+import           Network.Wai
+import           Network.Wai.Handler.Warp
+import           Servant
+import           Servant.API
+import           System.Environment           (getArgs)
+
+
+share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
+User json
+    name     Text
+    age      Int
+    deriving Eq Show Generic
+|]
+
+type HelloAPI  = Get '[PlainText] Text
+            :<|> "users" :> Get '[JSON] [User]
+
+helloApi :: Proxy HelloAPI
+helloApi = Proxy
+
+app :: Application
+app = serve helloApi server
+
+runDB :: ConnectInfo -> SqlPersistT (ResourceT (NoLoggingT IO)) a -> IO a
+runDB info = runNoLoggingT . runResourceT . withMySQLConn info . runSqlConn
+
+connInfo :: ConnectInfo
+connInfo = defaultConnectInfo { connectUser = "test", connectPassword = "secret", connectDatabase = "servant_persistent" }
+
+doMigration :: IO ()
+doMigration = runNoLoggingT $ runResourceT $ withMySQLConn connInfo $ runReaderT $ runMigration migrateAll
+
+server :: Server HelloAPI
+server = hello :<|> users
+    where
+        hello = return "Hello world"
+        users = lift doServing
+
+doServing :: IO [User]
+doServing = do
+    userList <- runDB connInfo $ selectList [] []
+    return $ map (\(Entity _ u) -> u) userList
+
+main :: IO ()
+main = do
+    args <- getArgs
+    let arg1 = if (length args > 0) then Just (args !! 0) else Nothing
+    case arg1 of
+        Just "migrate" -> doMigration
+        _ -> run 8080 app
