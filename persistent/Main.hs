@@ -43,8 +43,7 @@ User json
     deriving Eq Show Generic
 |]
 
-type HelloAPI  = Get '[PlainText] Text
-            :<|> "users" :> Get '[JSON] [User]
+type HelloAPI  = "users" :> Get '[JSON] [User]
             :<|> "users" :> Capture "name" Text :> Capture "age" Int :> Post '[JSON] ()
 
 helloApi :: Proxy HelloAPI
@@ -63,9 +62,8 @@ doMigration :: IO ()
 doMigration = runNoLoggingT $ runResourceT $ withMySQLConn connInfo $ runReaderT $ runMigration migrateAll
 
 server :: Server HelloAPI
-server = hello :<|> getUsers :<|> postUser
+server = getUsers :<|> postUser
     where
-        hello = return "Hello world"
         getUsers = lift selectUsers
         postUser n a = lift $ insertUser (User n a)
 
