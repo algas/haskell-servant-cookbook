@@ -45,6 +45,7 @@ User json
 
 type HelloAPI  = Get '[PlainText] Text
             :<|> "users" :> Get '[JSON] [User]
+            :<|> "users" :> Capture "name" Text :> Capture "age" Int :> Post '[JSON] ()
 
 helloApi :: Proxy HelloAPI
 helloApi = Proxy
@@ -62,15 +63,19 @@ doMigration :: IO ()
 doMigration = runNoLoggingT $ runResourceT $ withMySQLConn connInfo $ runReaderT $ runMigration migrateAll
 
 server :: Server HelloAPI
-server = hello :<|> users
+server = hello :<|> getUsers :<|> postUser
     where
         hello = return "Hello world"
-        users = lift doServing
+        getUsers = lift selectUsers
+        postUser n a = lift $ insertUser (User n a)
 
-doServing :: IO [User]
-doServing = do
+selectUsers :: IO [User]
+selectUsers = do
     userList <- runDB connInfo $ selectList [] []
     return $ map (\(Entity _ u) -> u) userList
+
+insertUser :: User -> IO ()
+insertUser = runDB connInfo . insert_
 
 main :: IO ()
 main = do
