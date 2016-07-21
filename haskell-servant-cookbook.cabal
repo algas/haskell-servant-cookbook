@@ -148,6 +148,7 @@ executable strongly-typed
                      , text
                      , bytestring
                      , email-validate
+                     , scientific
                      , aeson
                      , containers
                      , transformers
