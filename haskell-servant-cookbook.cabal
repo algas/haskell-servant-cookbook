@@ -149,6 +149,7 @@ executable strongly-typed
                      , bytestring
                      , email-validate
                      , scientific
+                     , MissingH
                      , aeson
                      , containers
                      , transformers

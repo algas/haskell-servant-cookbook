@@ -7,10 +7,12 @@ module Main where
 
 import           Data.Aeson
 import           Data.Aeson.Types         (typeMismatch)
-import           Data.Maybe               (fromJust)
+import           Data.Either.Utils        (maybeToEither)
+import           Data.Maybe               (fromJust, fromMaybe)
 import           Data.Scientific
 import           Data.Text                (Text)
 import           Data.Text.Encoding       (decodeUtf8, encodeUtf8)
+import           Data.Text.Read           (decimal, signed)
 import           GHC.Generics
 import           Network.Wai
 import           Network.Wai.Handler.Warp
@@ -27,8 +29,18 @@ data User = User
     , email :: EmailAddress
     } deriving (Show, Eq, Generic, FromJSON, ToJSON)
 
-user1 :: User
-user1 = User "John Smith" (fromJust (generateTeenage 18)) (fromJust (emailAddress "foo@example.com"))
+userList :: [User]
+userList =  [ User "John Smith" (fromJust (generateTeenage 18)) (fromJust (emailAddress "john@example.com"))
+            , User "Alice Jones" (fromJust (generateTeenage 14)) (fromJust (emailAddress "alice@example.com"))
+            ]
+
+instance FromHttpApiData Teenage where
+    parseQueryParam x =
+        let
+            y = parseQueryParam x :: Either Text Integer
+            in case y of
+                Right r -> maybeToEither "Teenage" (generateTeenage r)
+                Left l  -> Left "Teenage"
 
 instance FromJSON Teenage where
     parseJSON (Number s) =
@@ -50,7 +62,7 @@ instance FromJSON EmailAddress where
 instance ToJSON EmailAddress where
     toJSON = String . decodeUtf8 . toByteString
 
-type StrongAPI = "users" :> Get '[JSON] [User]
+type StrongAPI = "users" :> QueryParam "age" Teenage :> Get '[JSON] [User]
             :<|> "users" :> ReqBody '[JSON] User :> Post '[JSON] User
 
 strongApi :: Proxy StrongAPI
@@ -59,7 +71,8 @@ strongApi = Proxy
 server :: Server StrongAPI
 server = users :<|> newUser
     where
-        users = return [user1]
+        users Nothing  = return userList
+        users (Just a) = return [ u | u <- userList, age u == a ]
         newUser u = return u
 
 app :: Application
