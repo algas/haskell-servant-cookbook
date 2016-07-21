@@ -9,5 +9,5 @@ newtype Teenage = Teenage { teenage :: Integer }
 
 generateTeenage :: Integer -> Maybe Teenage
 generateTeenage x
-    | 12 <= x && x < 20 = Just $ Teenage x
+    | 12 < x && x < 20 = Just $ Teenage x
     | otherwise = Nothing
