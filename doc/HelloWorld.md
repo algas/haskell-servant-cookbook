@@ -112,7 +112,7 @@ main = do
 0. Test with curl  
 `$ curl http://localhost:8080`  
 `Hello world`  
-`$ curl http://localhost:8080/users/hoge/3`  
+`$ curl http://localhost:8080/user/hoge/3`  
 `{"age":3,"name":"hoge"}`
 0. Run client  
 `$ stack exec hello-client`  
