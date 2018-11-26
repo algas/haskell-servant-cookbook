@@ -1,9 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import           Control.Monad.Trans.Except (ExceptT, runExceptT)
 import           Data.Text                  (Text)
-import qualified Data.Text                  as T
 import           HelloApi
 import           Network.HTTP.Client        (Manager, defaultManagerSettings,
                                              newManager)
@@ -12,17 +10,17 @@ import           Servant.Client
 
 hello :<|> user = client helloApi
 
-queries :: Manager -> BaseUrl -> ExceptT ServantError IO (Text, User)
+queries :: Manager -> BaseUrl -> IO (Either ServantError (Text, User))
 queries manager baseurl = do
-    h <- hello manager baseurl
-    us <- user "John Smith" 26 manager baseurl
-    return (h, us)
+    h <- runClientM hello $ mkClientEnv manager baseurl
+    us <- runClientM (user "John Smith" 26) $ mkClientEnv manager baseurl
+    return $ (,) <$> h <*> us
 
 main :: IO ()
 main = do
     manager <- newManager defaultManagerSettings
     let baseUrl = BaseUrl Http "localhost" 8080 ""
-    res <- runExceptT $ queries manager baseUrl
+    res <- queries manager baseUrl
     case res of
         Left err -> putStrLn $ "Error: " ++ show err
         Right p -> do

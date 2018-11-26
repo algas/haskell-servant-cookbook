@@ -23,9 +23,9 @@ simpleApi = Proxy
 
 simple = client simpleApi
 
-queries :: Manager -> BaseUrl -> ExceptT ServantError IO Text
+queries :: Manager -> BaseUrl -> IO (Either ServantError Text)
 queries manager baseurl = do
-    h <- simple manager baseurl
+    h <- runClientM simple $ mkClientEnv manager baseurl
     return h
 
 server :: Server SimpleAPI
