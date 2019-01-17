@@ -11,8 +11,8 @@
 {-# LANGUAGE TypeOperators              #-}
 module Main where
 
+import           Control.Monad.IO.Class       (liftIO)
 import           Control.Monad.Logger         (NoLoggingT (..))
-import           Control.Monad.Trans.Class    (lift)
 import           Control.Monad.Trans.Reader   (runReaderT)
 import           Control.Monad.Trans.Resource (ResourceT, runResourceT)
 import           Data.Aeson
@@ -64,8 +64,8 @@ doMigration = runNoLoggingT $ runResourceT $ withMySQLConn connInfo $ runReaderT
 server :: Server HelloAPI
 server = getUsers :<|> postUser
     where
-        getUsers = lift selectUsers
-        postUser n a = lift $ insertUser (User n a)
+        getUsers = liftIO selectUsers
+        postUser n a = liftIO $ insertUser (User n a)
 
 selectUsers :: IO [User]
 selectUsers = do
@@ -78,7 +78,7 @@ insertUser = runDB connInfo . insert_
 main :: IO ()
 main = do
     args <- getArgs
-    let arg1 = if (length args > 0) then Just (args !! 0) else Nothing
+    let arg1 = if not (null args) then Just (head args) else Nothing
     case arg1 of
         Just "migrate" -> doMigration
-        _ -> run 8080 app
+        _              -> run 8080 app
