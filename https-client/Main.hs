@@ -18,7 +18,7 @@ main :: IO ()
 main = do
     manager <- newManager tlsManagerSettings
     let baseUrl = BaseUrl Https "localhost" 8080 ""
-    res <- runExceptT $ queries manager baseUrl
+    res <- queries manager baseUrl
     case res of
         Left err -> putStrLn $ "Error: " ++ show err
         Right p -> do
