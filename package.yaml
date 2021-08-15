@@ -1,0 +1,170 @@
+name:                haskell-servant-cookbook
+version:             0.1.1.0
+synopsis:            Haskell Servant Cookbook
+description:         Please see README.md
+homepage:            https://github.com/algas/haskell-servant-cookbook#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Masahiro Yamauchi
+maintainer:          sgt.yamauchi@gmail.com
+copyright:           2021 Masahiro Yamauchi
+category:            Web
+build-type:          Simple
+github:              algas/haskell-servant-cookbook
+
+extra-source-files:
+  - README.md
+
+dependencies:
+  - base >= 4.7 && < 5
+  - aeson
+  - text
+  - transformers
+
+library:
+  source-dirs: lib
+  dependencies:
+    - text
+    - http-client
+    - wai
+    - servant
+    - servant-client
+    - servant-server
+
+executables:
+  hello-client:
+    source-dirs:         hello-client
+    main:                Main.hs
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-servant-cookbook
+      - http-client
+      - wai
+      - servant
+      - servant-client
+      - servant-server
+  hello-server:
+    source-dirs:         hello-server
+    main:                Main.hs
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-servant-cookbook
+      - wai
+      - warp
+      - servant
+      - servant-server
+  logger:
+    source-dirs:         logger
+    main:                Main.hs
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-servant-cookbook
+      - wai
+      - wai-logger
+      - warp
+      - servant
+      - servant-server
+  https-client:
+    source-dirs:         https-client
+    main:                Main.hs
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-servant-cookbook
+      - http-client
+      - http-client-tls
+      - warp
+      - servant
+      - servant-client
+  https-server:
+    source-dirs:         https-server
+    main:                Main.hs
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-servant-cookbook
+      - wai
+      - warp
+      - warp-tls
+      - servant
+      - servant-server
+  persistent:
+    source-dirs:         persistent
+    main:                Main.hs
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-servant-cookbook
+      - either
+      - wai
+      - warp
+      - mtl
+      - monad-logger
+      - resourcet
+      - persistent
+      - persistent-mysql
+      - persistent-template
+      - servant
+      - servant-server
+  session:
+    source-dirs:         session
+    main:                Main.hs
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-servant-cookbook
+      - bytestring
+      - containers
+      - wai
+      - warp
+      - servant
+      - servant-server
+  strongly-typing:
+    source-dirs:         strongly-typing
+    main:                Main.hs
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-servant-cookbook
+      - bytestring
+      - containers
+      - email-validate
+      - scientific
+      - MissingH
+      - wai
+      - warp
+      - servant
+      - servant-server
+
+tests:
+  test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-servant-cookbook
+      - hspec
+      - hspec-wai
+      - hspec-wai-json

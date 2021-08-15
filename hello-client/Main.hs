@@ -10,7 +10,7 @@ import           Servant.Client
 
 hello :<|> user = client helloApi
 
-queries :: Manager -> BaseUrl -> IO (Either ServantError (Text, User))
+queries :: Manager -> BaseUrl -> IO (Either ClientError (Text, User))
 queries manager baseurl = do
     h <- runClientM hello $ mkClientEnv manager baseurl
     us <- runClientM (user "John Smith" 26) $ mkClientEnv manager baseurl
