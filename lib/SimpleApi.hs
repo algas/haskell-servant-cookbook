@@ -23,7 +23,7 @@ simpleApi = Proxy
 
 simple = client simpleApi
 
-queries :: Manager -> BaseUrl -> IO (Either ServantError Text)
+queries :: Manager -> BaseUrl -> IO (Either ClientError Text)
 queries manager baseurl = do
     h <- runClientM simple $ mkClientEnv manager baseurl
     return h
