@@ -1,179 +1,235 @@
-name:                haskell-servant-cookbook
-version:             0.1.0.0
-synopsis:            Haskell Servant Cookbook
-description:         Please see README.md
-homepage:            https://github.com/algas/haskell-servant-cookbook#readme
-license:             BSD3
-license-file:        LICENSE
-author:              Masahiro Yamauchi
-maintainer:          sgt.yamauchi@gmail.com
-copyright:           2016 Masahiro Yamauchi
-category:            Web
-build-type:          Simple
--- extra-source-files:
-cabal-version:       >=1.10
+cabal-version: 1.12
 
-library
-  hs-source-dirs:      lib
-  exposed-modules:     HelloApi
-                     , SimpleApi
-  build-depends:       base
-                     , text
-                     , aeson
-                     , transformers
-                     , http-client
-                     , wai
-                     , servant
-                     , servant-client
-                     , servant-server
-  default-language:    Haskell2010
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
 
-executable hello-client
-  hs-source-dirs:      hello-client
-  main-is:             Main.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       base
-                     , text
-                     , aeson
-                     , http-client
-                     , transformers
-                     , servant
-                     , servant-client
-                     , haskell-servant-cookbook
-  default-language:    Haskell2010
-
-executable hello-server
-  hs-source-dirs:      hello-server
-  main-is:             Main.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       base
-                     , text
-                     , aeson
-                     , wai
-                     , warp
-                     , servant
-                     , servant-server
-                     , haskell-servant-cookbook
-  default-language:    Haskell2010
-
-executable logger
-  hs-source-dirs:      logger
-  main-is:             Main.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       base
-                     , text
-                     , aeson
-                     , wai
-                     , wai-logger
-                     , warp
-                     , servant
-                     , servant-server
-                     , haskell-servant-cookbook
-  default-language:    Haskell2010
-
-executable https-client
-  hs-source-dirs:      https-client
-  main-is:             Main.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       base
-                     , text
-                     , aeson
-                     , http-client
-                     , http-client-tls
-                     , transformers
-                     , servant
-                     , servant-client
-                     , haskell-servant-cookbook
-  default-language:    Haskell2010
-
-executable https-server
-  hs-source-dirs:      https-server
-  main-is:             Main.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       base
-                     , text
-                     , aeson
-                     , wai
-                     , warp
-                     , warp-tls
-                     , servant
-                     , servant-server
-                     , haskell-servant-cookbook
-  default-language:    Haskell2010
-
-executable persistent
-  hs-source-dirs:      persistent
-  main-is:             Main.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       base
-                     , text
-                     , either
-                     , aeson
-                     , wai
-                     , warp
-                     , mtl
-                     , monad-logger
-                     , resourcet
-                     , transformers
-                     , persistent
-                     , persistent-mysql
-                     , persistent-template
-                     , servant
-                     , servant-server
-                     , haskell-servant-cookbook
-  default-language:    Haskell2010
-
-executable session
-  hs-source-dirs:      session
-  main-is:             Main.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       base
-                     , text
-                     , bytestring
-                     , aeson
-                     , containers
-                     , transformers
-                     , wai
-                     , warp
-                     , servant
-                     , servant-server
-                     , haskell-servant-cookbook
-  default-language:    Haskell2010
-
-executable strongly-typing
-  hs-source-dirs:      strongly-typing
-  main-is:             Main.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       base
-                     , text
-                     , bytestring
-                     , email-validate
-                     , scientific
-                     , MissingH
-                     , aeson
-                     , containers
-                     , transformers
-                     , wai
-                     , warp
-                     , servant
-                     , servant-server
-                     , haskell-servant-cookbook
-  default-language:    Haskell2010
-
-test-suite test
-  type:                exitcode-stdio-1.0
-  hs-source-dirs:      test
-  main-is:             Spec.hs
-  build-depends:       base
-                     , hspec
-                     , hspec-wai
-                     , hspec-wai-json
-                     , aeson
-                     , transformers
-                     , haskell-servant-cookbook
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  default-language:    Haskell2010
+name:           haskell-servant-cookbook
+version:        0.1.1.0
+synopsis:       Haskell Servant Cookbook
+description:    Please see README.md
+category:       Web
+homepage:       https://github.com/algas/haskell-servant-cookbook#readme
+bug-reports:    https://github.com/algas/haskell-servant-cookbook/issues
+author:         Masahiro Yamauchi
+maintainer:     sgt.yamauchi@gmail.com
+copyright:      2021 Masahiro Yamauchi
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
 
 source-repository head
-  type:     git
+  type: git
   location: https://github.com/algas/haskell-servant-cookbook
+
+library
+  exposed-modules:
+      HelloApi
+      SimpleApi
+  other-modules:
+      Paths_haskell_servant_cookbook
+  hs-source-dirs:
+      lib
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , http-client
+    , servant
+    , servant-client
+    , servant-server
+    , text
+    , transformers
+    , wai
+  default-language: Haskell2010
+
+executable hello-client
+  main-is: Main.hs
+  other-modules:
+      Paths_haskell_servant_cookbook
+  hs-source-dirs:
+      hello-client
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , haskell-servant-cookbook
+    , http-client
+    , servant
+    , servant-client
+    , servant-server
+    , text
+    , transformers
+    , wai
+  default-language: Haskell2010
+
+executable hello-server
+  main-is: Main.hs
+  other-modules:
+      Paths_haskell_servant_cookbook
+  hs-source-dirs:
+      hello-server
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , haskell-servant-cookbook
+    , servant
+    , servant-server
+    , text
+    , transformers
+    , wai
+    , warp
+  default-language: Haskell2010
+
+executable https-client
+  main-is: Main.hs
+  other-modules:
+      Paths_haskell_servant_cookbook
+  hs-source-dirs:
+      https-client
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , haskell-servant-cookbook
+    , http-client
+    , http-client-tls
+    , servant
+    , servant-client
+    , text
+    , transformers
+    , warp
+  default-language: Haskell2010
+
+executable https-server
+  main-is: Main.hs
+  other-modules:
+      Paths_haskell_servant_cookbook
+  hs-source-dirs:
+      https-server
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , haskell-servant-cookbook
+    , servant
+    , servant-server
+    , text
+    , transformers
+    , wai
+    , warp
+    , warp-tls
+  default-language: Haskell2010
+
+executable logger
+  main-is: Main.hs
+  other-modules:
+      Paths_haskell_servant_cookbook
+  hs-source-dirs:
+      logger
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , haskell-servant-cookbook
+    , servant
+    , servant-server
+    , text
+    , transformers
+    , wai
+    , wai-logger
+    , warp
+  default-language: Haskell2010
+
+executable persistent
+  main-is: Main.hs
+  other-modules:
+      Paths_haskell_servant_cookbook
+  hs-source-dirs:
+      persistent
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , either
+    , haskell-servant-cookbook
+    , monad-logger
+    , mtl
+    , persistent
+    , persistent-mysql
+    , persistent-template
+    , resourcet
+    , servant
+    , servant-server
+    , text
+    , transformers
+    , wai
+    , warp
+  default-language: Haskell2010
+
+executable session
+  main-is: Main.hs
+  other-modules:
+      Paths_haskell_servant_cookbook
+  hs-source-dirs:
+      session
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , haskell-servant-cookbook
+    , servant
+    , servant-server
+    , text
+    , transformers
+    , wai
+    , warp
+  default-language: Haskell2010
+
+executable strongly-typing
+  main-is: Main.hs
+  other-modules:
+      Teenage
+      Paths_haskell_servant_cookbook
+  hs-source-dirs:
+      strongly-typing
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      MissingH
+    , aeson
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , email-validate
+    , haskell-servant-cookbook
+    , scientific
+    , servant
+    , servant-server
+    , text
+    , transformers
+    , wai
+    , warp
+  default-language: Haskell2010
+
+test-suite test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_haskell_servant_cookbook
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , haskell-servant-cookbook
+    , hspec
+    , hspec-wai
+    , hspec-wai-json
+    , text
+    , transformers
+  default-language: Haskell2010
